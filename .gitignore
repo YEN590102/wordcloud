@@ -1,0 +1,12 @@
+# Firebase
+.firebase/
+firebase-debug.log
+
+# MCP / Claude
+.mcp.json
+.claude/
+
+# System
+null
+.DS_Store
+Thumbs.db
