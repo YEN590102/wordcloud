@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>即時文字雲</title>
+  <title>糖尿病足部檢查 即時文字雲</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -99,17 +99,47 @@
       font-size: 0.8rem;
       padding-bottom: 2rem;
     }
+
+    .info-box {
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+      padding: 1.2rem 1.5rem;
+      background: #1e293b;
+      border: 1.5px solid #334155;
+      border-radius: 1rem;
+    }
+    .info-box h2 {
+      font-size: 1.1rem;
+      color: #38bdf8;
+      margin-bottom: 0.6rem;
+    }
+    .info-box p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+    }
   </style>
 </head>
 <body>
 
+<!-- ===== 本次主題內容：換主題時只需修改這一區塊 ===== -->
 <header>
-  <h1>✨ 即時文字雲</h1>
-  <p>輸入你的關鍵字，大家的答案即時出現！</p>
+  <h1>✨ 糖尿病足部檢查 即時文字雲</h1>
+  <p>看完說明後，輸入你的關鍵字，大家的答案即時出現！</p>
 </header>
 
+<div class="info-box">
+  <h2>為什麼要做足部檢查？</h2>
+  <p>
+    糖尿病病人必須定期做足部檢查，主要是因為長期高血糖易引發神經病變與血管硬化。
+    這會導致雙腳麻痺、對痛覺及溫度遲鈍，即使受傷也難以察覺。
+    若未及早發現與治療，小傷口極易演變成潰瘍甚至面臨截肢的風險。
+  </p>
+</div>
+<!-- ===== 本次主題內容結束 ===== -->
+
 <div class="input-area">
-  <input type="text" id="wordInput" placeholder="輸入關鍵字…" maxlength="20" autocomplete="off" />
+  <input type="text" id="wordInput" placeholder="輸入你的關鍵字…" maxlength="20" autocomplete="off" />
   <button id="submitBtn" onclick="submitWord()">送出</button>
 </div>
 <div id="status"></div>
