@@ -122,7 +122,7 @@
 </head>
 <body>
 
-<!-- ===== 本次主題內容：換主題時只需修改這一區塊 ===== -->
+<!-- ===== 本次主題內容：換主題時修改這一區塊，並同步更新 <script> 裡的 TOPIC_ID ===== -->
 <header>
   <h1>✨ 糖尿病足部檢查 即時文字雲</h1>
   <p>看完說明後，輸入你的關鍵字，大家的答案即時出現！</p>
@@ -167,6 +167,10 @@
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
 
+  // 換主題時只需改這個 ID，關鍵字就會存到獨立的 collection，不會跟其他場次混在一起
+  const TOPIC_ID = 'diabetic_foot_exam';
+  const WORDS_COLLECTION = `wordcloud_${TOPIC_ID}`;
+
   const COLORS = [
     ['#38bdf8','#0c4a6e'],['#818cf8','#1e1b4b'],['#34d399','#064e3b'],
     ['#fb923c','#431407'],['#f472b6','#500724'],['#facc15','#422006'],
@@ -174,7 +178,7 @@
   ];
 
   // ── 即時監聽 ──────────────────────────────────────────
-  const q = query(collection(db, 'wordcloud_words'));
+  const q = query(collection(db, WORDS_COLLECTION));
   onSnapshot(q, (snapshot) => {
     const freq = {};
     snapshot.forEach(doc => {
@@ -221,7 +225,7 @@
     btn.disabled = true;
     status.textContent = '送出中…';
     try {
-      await addDoc(collection(db, 'wordcloud_words'), {
+      await addDoc(collection(db, WORDS_COLLECTION), {
         word,
         created_at: serverTimestamp()
       });
