@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>慢性病整合照護計畫成果展示</title>
+<style>
+  :root {
+    --bg:#f6f9fa; --card:#fff; --ink:#16303a; --muted:#5b7280; --line:#dbe6ea;
+    --brand:#0f766e; --brand-soft:#d9f0ed; --accent:#c2410c; --accent-soft:#fdebdc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0e1a1f; --card:#15262d; --ink:#e6f0f3; --muted:#93a9b3; --line:#243a44;
+            --brand:#2dd4bf; --brand-soft:#12373a; --accent:#fb923c; --accent-soft:#3a2314; }
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif; background:var(--bg); color:var(--ink); line-height:1.75; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 16px; }
+  nav { position:sticky; top:0; z-index:10; background:color-mix(in srgb,var(--bg) 90%,transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+  nav .wrap { display:flex; gap:1.2rem; overflow-x:auto; padding-block:.7rem; white-space:nowrap; font-size:.92rem; }
+  nav a { color:var(--muted); text-decoration:none; } nav a:hover { color:var(--brand); }
+  .hero { padding:4rem 0 3rem; }
+  .eyebrow { color:var(--brand); font-weight:700; letter-spacing:.08em; font-size:.85rem; }
+  h1 { font-size:clamp(1.9rem,5vw,2.9rem); line-height:1.3; margin:.5rem 0 1rem; }
+  .hero p { max-width:44rem; color:var(--muted); font-size:1.05rem; }
+  .tags { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.4rem; }
+  .tag { background:var(--brand-soft); color:var(--brand); padding:.2rem .8rem; border-radius:999px; font-size:.85rem; font-weight:600; }
+  section { padding:2.6rem 0; border-top:1px solid var(--line); }
+  h2 { font-size:1.5rem; margin-bottom:.4rem; }
+  .lead { color:var(--muted); margin-bottom:1.5rem; }
+  .grid { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:1.2rem 1.3rem; }
+  .card h3 { font-size:1.05rem; margin-bottom:.4rem; }
+  .card p, .card li { color:var(--muted); font-size:.95rem; }
+  .card ul { padding-left:1.1rem; }
+  .num { display:inline-grid; place-items:center; width:2rem; height:2rem; border-radius:50%; background:var(--brand); color:var(--card); font-weight:700; margin-bottom:.6rem; }
+  .kpi .val { font-size:2.3rem; font-weight:800; color:var(--brand); line-height:1.2; }
+  .kpi .val small { font-size:1rem; font-weight:600; }
+  .kpi .lbl { font-weight:600; }
+  .kpi .delta { font-size:.85rem; color:var(--accent); font-weight:600; }
+  .bars { display:grid; gap:1.1rem; }
+  .bar-row .head { display:flex; justify-content:space-between; font-size:.92rem; margin-bottom:.3rem; }
+  .track { position:relative; height:12px; background:var(--line); border-radius:99px; overflow:hidden; }
+  .fill { height:100%; border-radius:99px; background:var(--brand); width:0; transition:width 1s ease; }
+  .fill.base { background:var(--muted); opacity:.55; margin-bottom:4px; height:8px; }
+  .legend { display:flex; gap:1rem; font-size:.82rem; color:var(--muted); margin-bottom:1rem; }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:.3rem; }
+  .flow { display:grid; gap:.8rem; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); counter-reset:s; }
+  .step { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:1rem; position:relative; }
+  .step::before { counter-increment:s; content:counter(s); color:var(--brand); font-weight:800; font-size:1.4rem; }
+  .step b { display:block; } .step span { color:var(--muted); font-size:.9rem; }
+  .hl { border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 12px 12px 0; padding:1rem 1.2rem; margin-bottom:.8rem; }
+  .hl b { color:var(--accent); }
+  table { width:100%; border-collapse:collapse; background:var(--card); border-radius:14px; overflow:hidden; border:1px solid var(--line); font-size:.93rem; }
+  th,td { padding:.7rem .9rem; text-align:left; border-bottom:1px solid var(--line); }
+  th { background:var(--brand-soft); color:var(--brand); }
+  .scroll { overflow-x:auto; }
+  .pbi-frame { position:relative; width:100%; aspect-ratio:16/9; min-height:360px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--card); }
+  .pbi-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .pbi-empty { display:grid; place-items:center; text-align:center; padding:2rem; color:var(--muted); }
+  .tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.8rem; }
+  .tab { font:inherit; cursor:pointer; padding:.4rem 1.1rem; border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--muted); font-weight:600; }
+  .tab.on { background:var(--brand); border-color:var(--brand); color:var(--card); }
+  .btn { display:inline-block; margin-top:.8rem; padding:.55rem 1.2rem; border-radius:999px; background:var(--brand); color:var(--card); text-decoration:none; font-weight:700; font-size:.92rem; }
+  .note { margin-top:1rem; font-size:.82rem; color:var(--muted); }
+  footer { padding:2rem 0 3rem; text-align:center; color:var(--muted); font-size:.85rem; border-top:1px solid var(--line); }
+  .draft { background:var(--accent-soft); color:var(--accent); text-align:center; font-size:.85rem; padding:.4rem; font-weight:600; }
+</style>
+</head>
+<body>
+<div class="draft" id="draftBanner">⚠ 本頁數據為示意內容，發布前請至頁面下方 DATA 區塊替換為實際資料</div>
+
+<nav><div class="wrap">
+  <a href="#bg">計畫背景</a><a href="#strategy">執行策略</a><a href="#flow">照護流程</a>
+  <a href="#kpi">成果指標</a><a href="#powerbi">互動儀表板</a><a href="#highlight">亮點成果</a><a href="#next">後續規劃</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="eyebrow" id="orgName"></div>
+  <h1 id="title"></h1>
+  <p id="subtitle"></p>
+  <div class="tags" id="tags"></div>
+</div></header>
+
+<main class="wrap">
+  <section id="bg">
+    <h2>計畫背景與問題</h2>
+    <p class="lead">先界定照護缺口，再說明本計畫的切入點。</p>
+    <div class="grid" id="bgCards"></div>
+  </section>
+
+  <section id="strategy">
+    <h2>執行策略</h2>
+    <p class="lead">以臨床流程為核心，結合跨部門協作與資訊化追蹤。</p>
+    <div class="grid" id="stratCards"></div>
+  </section>
+
+  <section id="flow">
+    <h2>整合照護流程</h2>
+    <p class="lead">由個案篩選到持續追蹤的閉環管理。</p>
+    <div class="flow" id="flowSteps"></div>
+  </section>
+
+  <section id="kpi">
+    <h2>成果指標</h2>
+    <p class="lead" id="period"></p>
+    <div class="grid kpi" id="kpiCards" style="margin-bottom:2rem"></div>
+    <h3 style="margin-bottom:.6rem">照護品質指標：介入前後比較</h3>
+    <div class="legend"><span><i style="background:var(--muted);opacity:.55"></i>介入前</span><span><i style="background:var(--brand)"></i>介入後</span></div>
+    <div class="bars" id="bars"></div>
+    <div class="scroll" style="margin-top:2rem"><table id="tbl"></table></div>
+    <p class="note" id="kpiNote"></p>
+  </section>
+
+  <section id="powerbi">
+    <h2>互動式儀表板</h2>
+    <p class="lead" id="pbiLead"></p>
+    <div id="pbiBox"></div>
+  </section>
+
+  <section id="highlight">
+    <h2>亮點成果</h2>
+    <p class="lead">可供簡報與成果發表引用的重點。</p>
+    <div id="hls"></div>
+  </section>
+
+  <section id="next">
+    <h2>後續規劃</h2>
+    <div class="grid" id="nextCards"></div>
+  </section>
+</main>
+
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script>
+/* ============ DATA：發布前請以實際資料取代（以下皆為示意） ============ */
+const DATA = {
+  draft: true,
+  org: "○○醫院 慢性病管理中心",
+  title: "慢性病整合照護計畫成果展示",
+  subtitle: "以個案管理為核心，整合醫師、個管師、護理、營養與藥事團隊，提升慢性病照護連續性與控制達標率。",
+  tags: ["糖尿病", "高血壓", "CKM 症候群", "跨團隊協作"],
+  background: [
+    { t: "照護現況", d: "慢性病個案人數持續成長，門診時間有限，衛教與追蹤多仰賴個別經驗。" },
+    { t: "主要缺口", d: "收案後追蹤中斷、檢驗未依時完成、跨科別資訊未整合，影響控制品質。" },
+    { t: "計畫目標", d: "建立標準化收案、分層照護與追蹤機制，使成效可被監測、可被呈現。" }
+  ],
+  strategy: [
+    { t: "分層收案", items: ["依風險與控制情形分級", "高風險個案優先介入", "對應論質計酬收案條件"] },
+    { t: "標準化衛教", items: ["依分期設計衛教內容", "teach-back 確認理解", "長者友善衛教單張"] },
+    { t: "跨團隊協作", items: ["個管師、營養、藥事共同照護", "定期品質討論會議", "異常指標即時回報醫師"] },
+    { t: "資訊化追蹤", items: ["檢驗到期自動提醒", "未回診名單每週清查", "指標儀表板月報"] }
+  ],
+  flow: [
+    ["篩選收案", "由門診與病房轉介，確認符合收案條件"],
+    ["初次評估", "疾病史、用藥、生活型態與自我管理能力"],
+    ["個別化計畫", "與個案共訂目標，安排衛教與追蹤頻率"],
+    ["定期追蹤", "電話、門診、檢驗追蹤，異常即時處理"],
+    ["成效檢討", "季度指標檢視並回饋團隊"]
+  ],
+  /* Power BI：reports 每筆填 name（分頁標題）、embedUrl（內嵌網址）、reportUrl（選填，新分頁開啟用，預設同 embedUrl） */
+  powerbi: {
+    lead: "可直接篩選科別、期間與指標，檢視完整動態分析。",
+    reports: [
+      { name: "DM 年度達標", embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiNzY3MmM2OTItNDg4Ni00MGFlLTg0MzUtNDk3OWM2ZDRkODYwIiwidCI6IjI0ZGUwNjgxLWM4ZjctNDZlOC04ZGE3LTFmNWIzOTNkODM0ZCIsImMiOjEwfQ%3D%3D" },
+      { name: "胰島素降血糖", embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiM2Y4ZTY1ZGYtNmU4ZC00OGZhLThhNTUtYmI1ODcyN2JiOWE0IiwidCI6IjI0ZGUwNjgxLWM4ZjctNDZlOC04ZGE3LTFmNWIzOTNkODM0ZCIsImMiOjEwfQ%3D%3D" }
+    ]
+  },
+  period: "統計期間：○○○ 年 ○ 月至 ○○○ 年 ○ 月（示意）",
+  kpis: [
+    { l: "累計收案人數", v: 1250, u: "人", d: "較前期 +18%" },
+    { l: "持續追蹤率", v: 86, u: "%", d: "+9 個百分點" },
+    { l: "衛教完成率", v: 92, u: "%", d: "+7 個百分點" },
+    { l: "跨團隊會診件數", v: 310, u: "件", d: "較前期 +24%" }
+  ],
+  quality: [
+    { l: "HbA1c < 7% 達標率", b: 42, a: 53 },
+    { l: "血壓 < 130/80 mmHg 達標率", b: 38, a: 49 },
+    { l: "LDL-C 達標率", b: 35, a: 47 },
+    { l: "年度檢驗完成率", b: 71, a: 88 }
+  ],
+  qualityNote: "指標定義與分母請與院內資料倉儲及健保品質指標口徑一致；以上為示意數值。",
+  highlights: [
+    { t: "控制達標率明顯提升", d: "主要品質指標於介入後較基期提升約 10 個百分點。" },
+    { t: "建立可複製的照護流程", d: "完成收案、衛教、追蹤 SOP，可推展至其他科別。" },
+    { t: "資料驅動的品質改善", d: "每月指標回饋，使團隊能及早發現並修正落差。" }
+  ],
+  next: [
+    { t: "擴大收案範圍", d: "納入 CKM 高風險族群與社區轉介個案。" },
+    { t: "強化數位工具", d: "發展個案端提醒與居家量測回傳機制。" },
+    { t: "成效深化評估", d: "追蹤再住院、急診使用與醫療資源利用變化。" }
+  ],
+  footer: "○○醫院 慢性病管理中心 · 聯絡窗口：○○○（分機 ○○○○）"
+};
+/* ================================================================== */
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+if (!DATA.draft) $('draftBanner').remove();
+document.title = DATA.title;
+$('orgName').textContent = DATA.org;
+$('title').textContent = DATA.title;
+$('subtitle').textContent = DATA.subtitle;
+$('tags').innerHTML = DATA.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('');
+$('bgCards').innerHTML = DATA.background.map(x => `<div class="card"><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p></div>`).join('');
+$('stratCards').innerHTML = DATA.strategy.map((x,i) =>
+  `<div class="card"><div class="num">${i+1}</div><h3>${esc(x.t)}</h3><ul>${x.items.map(y=>`<li>${esc(y)}</li>`).join('')}</ul></div>`).join('');
+$('flowSteps').innerHTML = DATA.flow.map(([t,d]) => `<div class="step"><b>${esc(t)}</b><span>${esc(d)}</span></div>`).join('');
+$('period').textContent = DATA.period;
+$('kpiCards').innerHTML = DATA.kpis.map(k =>
+  `<div class="card"><div class="val" data-to="${k.v}">0<small>${esc(k.u)}</small></div><div class="lbl">${esc(k.l)}</div><div class="delta">${esc(k.d)}</div></div>`).join('');
+$('bars').innerHTML = DATA.quality.map(q =>
+  `<div class="bar-row"><div class="head"><span>${esc(q.l)}</span><b>${q.b}% → ${q.a}%（+${q.a-q.b}）</b></div>
+   <div class="track fill-base" style="height:8px;margin-bottom:4px"><div class="fill base" data-w="${q.b}" style="height:8px;margin:0"></div></div>
+   <div class="track"><div class="fill" data-w="${q.a}"></div></div></div>`).join('');
+$('tbl').innerHTML = `<tr><th>指標</th><th>介入前</th><th>介入後</th><th>變化</th></tr>` +
+  DATA.quality.map(q => `<tr><td>${esc(q.l)}</td><td>${q.b}%</td><td>${q.a}%</td><td>+${q.a-q.b} 個百分點</td></tr>`).join('');
+(() => {
+  const p = DATA.powerbi, box = $('pbiBox');
+  $('pbiLead').textContent = p.lead;
+  if (!p.reports.length) { box.innerHTML = '<div class="pbi-frame pbi-empty"><div>尚未設定 Power BI 連結</div></div>'; return; }
+  const show = n => {
+    const r = p.reports[n], link = r.reportUrl || r.embedUrl;
+    box.innerHTML = (p.reports.length > 1 ? `<div class="tabs" role="tablist">${p.reports.map((x,k) =>
+        `<button role="tab" class="tab${k===n?' on':''}" data-k="${k}" aria-selected="${k===n}">${esc(x.name)}</button>`).join('')}</div>` : '') +
+      `<div class="pbi-frame"><iframe src="${esc(r.embedUrl)}" title="${esc(r.name)}" allowfullscreen loading="lazy" referrerpolicy="no-referrer"></iframe></div>` +
+      `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">在新分頁開啟完整報表 ↗</a>`;
+    box.querySelectorAll('.tab').forEach(b => b.onclick = () => show(+b.dataset.k));
+  };
+  show(0);
+})();
+$('kpiNote').textContent = DATA.qualityNote;
+$('hls').innerHTML = DATA.highlights.map(h => `<div class="hl"><b>${esc(h.t)}</b><br>${esc(h.d)}</div>`).join('');
+$('nextCards').innerHTML = DATA.next.map(x => `<div class="card"><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p></div>`).join('');
+$('foot').textContent = DATA.footer;
+
+/* 捲動進入時動畫 */
+const animate = el => {
+  if (el.dataset.to) {
+    const to = +el.dataset.to, small = el.querySelector('small').outerHTML, t0 = performance.now();
+    const tick = t => { const p = Math.min((t-t0)/900,1); el.innerHTML = Math.round(to*p).toLocaleString()+small; if (p<1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  } else if (el.dataset.w) el.style.width = el.dataset.w + '%';
+};
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { animate(e.target); io.unobserve(e.target); } }), {threshold:.3});
+document.querySelectorAll('[data-to],[data-w]').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
