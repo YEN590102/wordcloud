@@ -59,6 +59,9 @@
   .pbi-frame { position:relative; width:100%; aspect-ratio:16/9; min-height:360px; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--card); }
   .pbi-frame iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
   .pbi-empty { display:grid; place-items:center; text-align:center; padding:2rem; color:var(--muted); }
+  .tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.8rem; }
+  .tab { font:inherit; cursor:pointer; padding:.4rem 1.1rem; border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--muted); font-weight:600; }
+  .tab.on { background:var(--brand); border-color:var(--brand); color:var(--card); }
   .btn { display:inline-block; margin-top:.8rem; padding:.55rem 1.2rem; border-radius:999px; background:var(--brand); color:var(--card); text-decoration:none; font-weight:700; font-size:.92rem; }
   .note { margin-top:1rem; font-size:.82rem; color:var(--muted); }
   footer { padding:2rem 0 3rem; text-align:center; color:var(--muted); font-size:.85rem; border-top:1px solid var(--line); }
@@ -156,11 +159,13 @@ const DATA = {
     ["定期追蹤", "電話、門診、檢驗追蹤，異常即時處理"],
     ["成效檢討", "季度指標檢視並回饋團隊"]
   ],
-  /* Power BI：embedUrl 填「發佈到網路」或「安全內嵌」的內嵌連結；reportUrl 填一般報表連結（新分頁開啟用）。兩者皆可留空 */
+  /* Power BI：reports 每筆填 name（分頁標題）、embedUrl（內嵌網址）、reportUrl（選填，新分頁開啟用，預設同 embedUrl） */
   powerbi: {
     lead: "可直接篩選科別、期間與指標，檢視完整動態分析。",
-    embedUrl: "",
-    reportUrl: ""
+    reports: [
+      { name: "DM 年度達標", embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiNzY3MmM2OTItNDg4Ni00MGFlLTg0MzUtNDk3OWM2ZDRkODYwIiwidCI6IjI0ZGUwNjgxLWM4ZjctNDZlOC04ZGE3LTFmNWIzOTNkODM0ZCIsImMiOjEwfQ%3D%3D" },
+      { name: "胰島素降血糖", embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiM2Y4ZTY1ZGYtNmU4ZC00OGZhLThhNTUtYmI1ODcyN2JiOWE0IiwidCI6IjI0ZGUwNjgxLWM4ZjctNDZlOC04ZGE3LTFmNWIzOTNkODM0ZCIsImMiOjEwfQ%3D%3D" }
+    ]
   },
   period: "統計期間：○○○ 年 ○ 月至 ○○○ 年 ○ 月（示意）",
   kpis: [
@@ -215,10 +220,16 @@ $('tbl').innerHTML = `<tr><th>指標</th><th>介入前</th><th>介入後</th><th
 (() => {
   const p = DATA.powerbi, box = $('pbiBox');
   $('pbiLead').textContent = p.lead;
-  const link = p.reportUrl || p.embedUrl;
-  if (p.embedUrl) box.innerHTML = `<div class="pbi-frame"><iframe src="${esc(p.embedUrl)}" title="Power BI 儀表板" allowfullscreen loading="lazy" referrerpolicy="no-referrer"></iframe></div>`;
-  else box.innerHTML = `<div class="pbi-frame pbi-empty"><div>尚未設定 Power BI 連結<br><small>請於 DATA.powerbi.embedUrl 填入內嵌網址</small></div></div>`;
-  if (link) box.insertAdjacentHTML('beforeend', `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">在新分頁開啟完整報表 ↗</a>`);
+  if (!p.reports.length) { box.innerHTML = '<div class="pbi-frame pbi-empty"><div>尚未設定 Power BI 連結</div></div>'; return; }
+  const show = n => {
+    const r = p.reports[n], link = r.reportUrl || r.embedUrl;
+    box.innerHTML = (p.reports.length > 1 ? `<div class="tabs" role="tablist">${p.reports.map((x,k) =>
+        `<button role="tab" class="tab${k===n?' on':''}" data-k="${k}" aria-selected="${k===n}">${esc(x.name)}</button>`).join('')}</div>` : '') +
+      `<div class="pbi-frame"><iframe src="${esc(r.embedUrl)}" title="${esc(r.name)}" allowfullscreen loading="lazy" referrerpolicy="no-referrer"></iframe></div>` +
+      `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">在新分頁開啟完整報表 ↗</a>`;
+    box.querySelectorAll('.tab').forEach(b => b.onclick = () => show(+b.dataset.k));
+  };
+  show(0);
 })();
 $('kpiNote').textContent = DATA.qualityNote;
 $('hls').innerHTML = DATA.highlights.map(h => `<div class="hl"><b>${esc(h.t)}</b><br>${esc(h.d)}</div>`).join('');
